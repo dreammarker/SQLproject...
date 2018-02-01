@@ -1,0 +1,328 @@
+HR@orcl> SELECT last_name, department_id, department_name
+  2  FROM employees JOIN departments
+  3  USING (department_id);
+
+LAST_NAME                 DEPARTMENT_ID DEPARTMENT_NAME                                                                 
+------------------------- ------------- ------------------------------                                                  
+Abel                                 80 Sales                                                                           
+Davies                               50 Shipping                                                                        
+De Haan                              90 Executive                                                                       
+Dean                                 60 IT                                                                              
+Ernst                                60 IT                                                                              
+Fay                                  20 Marketing                                                                       
+Gietz                               110 Accounting                                                                      
+Hartstein                            40 Human Resource                                                                  
+Higgins                             110 Accounting                                                                      
+Hunold                               60 IT                                                                              
+King                                 90 Executive                                                                       
+Kochhar                              90 Executive                                                                       
+Lorentz                              60 IT                                                                              
+Matos                                50 Shipping                                                                        
+Mourgos                              50 Shipping                                                                        
+Popp                                110 Accounting                                                                      
+Rajs                                 50 Shipping                                                                        
+Raphealy                             60 IT                                                                              
+Taylor                               80 Sales                                                                           
+Vargas                               50 Shipping                                                                        
+Whalen                               10 Administration                                                                  
+Zlotkey                              80 Sales                                                                           
+
+22 rows selected.
+
+HR@orcl> SELECT e.last_name,e.job_id,e.department_id,d.department_name
+  2  FROM employees e JOIN departments d
+  3  ON (e.department_id = d.department_id)
+  4  JOIN locations l
+  5  ON (d.location_id = m.location_id)
+  6  WHERE LOWER(1,city) = 'toronto';
+WHERE LOWER(1,city) = 'toronto'
+      *
+ERROR at line 6:
+ORA-00909: invalid number of arguments 
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT e.last_name,e.job_id,e.department_id,d.department_name
+  2  FROM employees e JOIN departments d
+  3  ON (e.department_id = d.department_id)
+  4  JOIN locations l
+  5  ON (d.location_id = m.location_id)
+  6* WHERE LOWER(1.city) = 'toronto'
+HR@orcl> /
+WHERE LOWER(1.city) = 'toronto'
+              *
+ERROR at line 6:
+ORA-00907: missing right parenthesis 
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT e.last_name,e.job_id,e.department_id,d.department_name
+  2  FROM employees e JOIN departments d
+  3  ON (e.department_id = d.department_id)
+  4  JOIN locations l
+  5  ON (d.location_id = l.location_id)
+  6* WHERE LOWER(1.city) = 'toronto'
+HR@orcl> /
+WHERE LOWER(1.city) = 'toronto'
+              *
+ERROR at line 6:
+ORA-00907: missing right parenthesis 
+
+
+HR@orcl> SELECT e.last_name, e.job_id,e.department_id,
+  2  d.department_name
+  3  FROM employees e JOIN departments d
+  4  ON (e.department_id = d.department_id)
+  5  JOIN locations l
+  6  ON (d.location_id = l.location_id)
+  7  WHERE LOWER(l.city) = 'toronto';
+
+LAST_NAME                 JOB_ID     DEPARTMENT_ID DEPARTMENT_NAME                                                      
+------------------------- ---------- ------------- ------------------------------                                       
+Fay                       MK_REP                20 Marketing                                                            
+
+HR@orcl> SELECT w.last_name "Employee", w.employee_id "EMPW",
+  2  m.last_name " Manager", m.employee_id "Mgr#"
+  3  FROM employees w join employees m
+  4  ON (w.manager_id = m.employee_id);
+
+Employee                        EMPW  Manager                        Mgr#                                               
+------------------------- ---------- ------------------------- ----------                                               
+Kochhar                          101 King                             100                                               
+De Haan                          102 King                             100                                               
+Hunold                           103 De Haan                          102                                               
+Ernst                            104 Hunold                           103                                               
+Lorentz                          107 Hunold                           103                                               
+Mourgos                          124 King                             100                                               
+Rajs                             141 Mourgos                          124                                               
+Davies                           142 Mourgos                          124                                               
+Matos                            143 Mourgos                          124                                               
+Vargas                           144 Mourgos                          124                                               
+Zlotkey                          149 King                             100                                               
+Abel                             174 Zlotkey                          149                                               
+Taylor                           176 Zlotkey                          149                                               
+Grant                            178 Zlotkey                          149                                               
+Whalen                           200 Kochhar                          101                                               
+Hartstein                        201 King                             100                                               
+Fay                              202 Hartstein                        201                                               
+Higgins                          205 Kochhar                          101                                               
+Gietz                            206 Higgins                          205                                               
+Raphealy                         114 King                             100                                               
+Dean                             115 King                             100                                               
+Popp                             113 Higgins                          205                                               
+
+22 rows selected.
+
+HR@orcl> save lab_06_04.sql
+Created file lab_06_04.sql
+HR@orcl> @ lab_06_04.sql
+HR@orcl> SELECT w.last_name "Employee", w.employee_id "EMPW",
+  2  m.last_name " Manager", m.employee_id "Mgr#"
+  3  FROM employees w join employees m
+  4  ON (w.manager_id = m.employee_id)
+  5  /
+
+Employee                        EMPW  Manager                        Mgr#                                               
+------------------------- ---------- ------------------------- ----------                                               
+Kochhar                          101 King                             100                                               
+De Haan                          102 King                             100                                               
+Hunold                           103 De Haan                          102                                               
+Ernst                            104 Hunold                           103                                               
+Lorentz                          107 Hunold                           103                                               
+Mourgos                          124 King                             100                                               
+Rajs                             141 Mourgos                          124                                               
+Davies                           142 Mourgos                          124                                               
+Matos                            143 Mourgos                          124                                               
+Vargas                           144 Mourgos                          124                                               
+Zlotkey                          149 King                             100                                               
+Abel                             174 Zlotkey                          149                                               
+Taylor                           176 Zlotkey                          149                                               
+Grant                            178 Zlotkey                          149                                               
+Whalen                           200 Kochhar                          101                                               
+Hartstein                        201 King                             100                                               
+Fay                              202 Hartstein                        201                                               
+Higgins                          205 Kochhar                          101                                               
+Gietz                            206 Higgins                          205                                               
+Raphealy                         114 King                             100                                               
+Dean                             115 King                             100                                               
+Popp                             113 Higgins                          205                                               
+
+22 rows selected.
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT w.last_name "Employee", w.employee_id "EMPW",
+  2  m.last_name " Manager", m.employee_id "Mgr#"
+  3  FROM employees w join employees m
+  4  ON (w.manager_id = m.employee_id)
+  5* ORDER BY 2
+HR@orcl> /
+
+Employee                        EMPW  Manager                        Mgr#                                               
+------------------------- ---------- ------------------------- ----------                                               
+Kochhar                          101 King                             100                                               
+De Haan                          102 King                             100                                               
+Hunold                           103 De Haan                          102                                               
+Ernst                            104 Hunold                           103                                               
+Lorentz                          107 Hunold                           103                                               
+Popp                             113 Higgins                          205                                               
+Raphealy                         114 King                             100                                               
+Dean                             115 King                             100                                               
+Mourgos                          124 King                             100                                               
+Rajs                             141 Mourgos                          124                                               
+Davies                           142 Mourgos                          124                                               
+Matos                            143 Mourgos                          124                                               
+Vargas                           144 Mourgos                          124                                               
+Zlotkey                          149 King                             100                                               
+Abel                             174 Zlotkey                          149                                               
+Taylor                           176 Zlotkey                          149                                               
+Grant                            178 Zlotkey                          149                                               
+Whalen                           200 Kochhar                          101                                               
+Hartstein                        201 King                             100                                               
+Fay                              202 Hartstein                        201                                               
+Higgins                          205 Kochhar                          101                                               
+Gietz                            206 Higgins                          205                                               
+
+22 rows selected.
+
+HR@orcl> save lab_06_05.sql
+Created file lab_06_05.sql
+HR@orcl> @lab_06_05.sql
+HR@orcl> SELECT w.last_name "Employee", w.employee_id "EMPW",
+  2  m.last_name " Manager", m.employee_id "Mgr#"
+  3  FROM employees w join employees m
+  4  ON (w.manager_id = m.employee_id)
+  5  ORDER BY 2
+  6  /
+
+Employee                        EMPW  Manager                        Mgr#                                               
+------------------------- ---------- ------------------------- ----------                                               
+Kochhar                          101 King                             100                                               
+De Haan                          102 King                             100                                               
+Hunold                           103 De Haan                          102                                               
+Ernst                            104 Hunold                           103                                               
+Lorentz                          107 Hunold                           103                                               
+Popp                             113 Higgins                          205                                               
+Raphealy                         114 King                             100                                               
+Dean                             115 King                             100                                               
+Mourgos                          124 King                             100                                               
+Rajs                             141 Mourgos                          124                                               
+Davies                           142 Mourgos                          124                                               
+Matos                            143 Mourgos                          124                                               
+Vargas                           144 Mourgos                          124                                               
+Zlotkey                          149 King                             100                                               
+Abel                             174 Zlotkey                          149                                               
+Taylor                           176 Zlotkey                          149                                               
+Grant                            178 Zlotkey                          149                                               
+Whalen                           200 Kochhar                          101                                               
+Hartstein                        201 King                             100                                               
+Fay                              202 Hartstein                        201                                               
+Higgins                          205 Kochhar                          101                                               
+Gietz                            206 Higgins                          205                                               
+
+22 rows selected.
+
+HR@orcl> SELECT e.department_id department, e.last_name employee,
+  2  c.last_name colleague
+  3  ON (e.department_id = c.department_id)
+  4  WHERE e.employee_id <> c.employee_id
+  5  ORDER BY e.department_id, e.last_name, c.last_name;
+ON (e.department_id = c.department_id)
+*
+ERROR at line 3:
+ORA-00923: FROM keyword not found where expected 
+
+
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  SELECT e.department_id department, e.last_name employee,
+  2  c.last_name colleague
+  3  FROM employees e JOIN employees c
+  4  ON (e.department_id = c.department_id)
+  5  WHERE e.employee_id <> c.employee_id
+  6* ORDER BY e.department_id, e.last_name, c.last_name
+HR@orcl> /
+
+DEPARTMENT EMPLOYEE                  COLLEAGUE                                                                          
+---------- ------------------------- -------------------------                                                          
+        50 Davies                    Matos                                                                              
+        50 Davies                    Mourgos                                                                            
+        50 Davies                    Rajs                                                                               
+        50 Davies                    Vargas                                                                             
+        50 Matos                     Davies                                                                             
+        50 Matos                     Mourgos                                                                            
+        50 Matos                     Rajs                                                                               
+        50 Matos                     Vargas                                                                             
+        50 Mourgos                   Davies                                                                             
+        50 Mourgos                   Matos                                                                              
+        50 Mourgos                   Rajs                                                                               
+        50 Mourgos                   Vargas                                                                             
+        50 Rajs                      Davies                                                                             
+        50 Rajs                      Matos                                                                              
+        50 Rajs                      Mourgos                                                                            
+        50 Rajs                      Vargas                                                                             
+        50 Vargas                    Davies                                                                             
+        50 Vargas                    Matos                                                                              
+        50 Vargas                    Mourgos                                                                            
+        50 Vargas                    Rajs                                                                               
+        60 Dean                      Ernst                                                                              
+        60 Dean                      Hunold                                                                             
+        60 Dean                      Lorentz                                                                            
+        60 Dean                      Raphealy                                                                           
+        60 Ernst                     Dean                                                                               
+        60 Ernst                     Hunold                                                                             
+        60 Ernst                     Lorentz                                                                            
+
+DEPARTMENT EMPLOYEE                  COLLEAGUE                                                                          
+---------- ------------------------- -------------------------                                                          
+        60 Ernst                     Raphealy                                                                           
+        60 Hunold                    Dean                                                                               
+        60 Hunold                    Ernst                                                                              
+        60 Hunold                    Lorentz                                                                            
+        60 Hunold                    Raphealy                                                                           
+        60 Lorentz                   Dean                                                                               
+        60 Lorentz                   Ernst                                                                              
+        60 Lorentz                   Hunold                                                                             
+        60 Lorentz                   Raphealy                                                                           
+        60 Raphealy                  Dean                                                                               
+        60 Raphealy                  Ernst                                                                              
+        60 Raphealy                  Hunold                                                                             
+        60 Raphealy                  Lorentz                                                                            
+        80 Abel                      Taylor                                                                             
+        80 Abel                      Zlotkey                                                                            
+        80 Taylor                    Abel                                                                               
+        80 Taylor                    Zlotkey                                                                            
+        80 Zlotkey                   Abel                                                                               
+        80 Zlotkey                   Taylor                                                                             
+        90 De Haan                   King                                                                               
+        90 De Haan                   Kochhar                                                                            
+        90 King                      De Haan                                                                            
+        90 King                      Kochhar                                                                            
+        90 Kochhar                   De Haan                                                                            
+        90 Kochhar                   King                                                                               
+       110 Gietz                     Higgins                                                                            
+       110 Gietz                     Popp                                                                               
+
+DEPARTMENT EMPLOYEE                  COLLEAGUE                                                                          
+---------- ------------------------- -------------------------                                                          
+       110 Higgins                   Gietz                                                                              
+       110 Higgins                   Popp                                                                               
+       110 Popp                      Gietz                                                                              
+       110 Popp                      Higgins                                                                            
+
+58 rows selected.
+
+HR@orcl> DESC JOB_GRADES
+ Name                                                              Null?    Type
+ ----------------------------------------------------------------- -------- --------------------------------------------
+ GRADE_LEVEL                                                                VARCHAR2(3)
+ LOWEST_SAL                                                                 NUMBER
+ HIGHEST_SAL                                                                NUMBER
+
+HR@orcl> SPOOL OFF
