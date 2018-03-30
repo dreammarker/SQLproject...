@@ -1,0 +1,26 @@
+매니져인사원의 이름 출력
+1.self join 
+HR@orcl> ed
+Wrote file afiedt.buf
+
+  1  select  distinct m.last_name
+  2      from employees e join employees m
+  3*     on e.manager_id=m.employee_id
+2.sub
+
+Wrote file afiedt.buf
+
+  1  select last_name
+  2  from employees
+  3  where employee_id  in (select manager_id
+  4                     from employees
+  5*                    where manager_id is not null)
+
+매니저가 아닌 사람 이름 출력
+Wrote file afiedt.buf
+
+  1  select last_name
+  2  from employees
+  3  where employee_id not in (select manager_id
+  4                     from employees
+  5*                    where manager_id is not null)
